@@ -1,0 +1,236 @@
+[
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/main.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/main.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/main.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/core/entity.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/core/entity.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/core/object.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/core/object.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/core/tuple.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/core/tuple.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/object_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/object_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/membership_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/membership_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/tuple_element_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/tuple_element_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/ast_tables.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/ast_tables.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/obligation_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/obligation_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/storage/membership_matrix.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/storage/membership_matrix.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/engine/logic_engine.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/engine/logic_engine.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/logic_engine.dir/src/engine/evaluator.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "output": "CMakeFiles/logic_engine.dir/src/engine/evaluator.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/test_survey.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/test_survey.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/test_survey.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/test_survey.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/core/entity.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/core/entity.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/core/object.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/core/object.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/core/tuple.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/core/tuple.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/object_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/object_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/membership_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/membership_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/tuple_element_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/tuple_element_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/ast_tables.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/ast_tables.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/obligation_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/obligation_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/storage/membership_matrix.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/storage/membership_matrix.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/engine/logic_engine.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/engine/logic_engine.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/test_survey.dir/src/engine/evaluator.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "output": "CMakeFiles/test_survey.dir/src/engine/evaluator.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/test/test_membership.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_membership.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_membership.cpp",
+  "output": "CMakeFiles/run_tests.dir/test/test_membership.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/test/test_obligations.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_obligations.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_obligations.cpp",
+  "output": "CMakeFiles/run_tests.dir/test/test_obligations.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/test/test_ast.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_ast.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_ast.cpp",
+  "output": "CMakeFiles/run_tests.dir/test/test_ast.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/test/test_materialization.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_materialization.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/test/test_materialization.cpp",
+  "output": "CMakeFiles/run_tests.dir/test/test_materialization.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/core/entity.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/entity.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/core/entity.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/core/object.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/object.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/core/object.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/core/tuple.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/core/tuple.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/core/tuple.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/object_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/object_table.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/object_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/membership_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_table.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/membership_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/tuple_element_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/tuple_element_table.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/tuple_element_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/ast_tables.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/ast_tables.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/ast_tables.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/obligation_table.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/obligation_table.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/obligation_table.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/storage/membership_matrix.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/storage/membership_matrix.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/storage/membership_matrix.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/engine/logic_engine.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/logic_engine.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/engine/logic_engine.cpp.o"
+},
+{
+  "directory": "/Users/nhatminh/dev/active/logic/logic_execution_engine/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/nhatminh/dev/active/logic/logic_execution_engine/include -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.5 -o CMakeFiles/run_tests.dir/src/engine/evaluator.cpp.o -c /Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "file": "/Users/nhatminh/dev/active/logic/logic_execution_engine/src/engine/evaluator.cpp",
+  "output": "CMakeFiles/run_tests.dir/src/engine/evaluator.cpp.o"
+}
+]

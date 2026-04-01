@@ -1,0 +1,5 @@
+if(EXISTS "/Users/nhatminh/dev/active/logic/logic_execution_engine/build/run_tests[1]_tests.cmake")
+  include("/Users/nhatminh/dev/active/logic/logic_execution_engine/build/run_tests[1]_tests.cmake")
+else()
+  add_test(run_tests_NOT_BUILT run_tests_NOT_BUILT)
+endif()
