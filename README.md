@@ -89,11 +89,32 @@ logic_execution_engine/
 └── docs/            # Design documents and vision
 ```
 
-## Tech stack
+## Requirements
 
-- **C++17** — zero external runtime dependencies beyond the standard library
-- **CMake** — build system
-- **Google Test** — test framework
+| Tool | Minimum version | Notes |
+|------|----------------|-------|
+| C++ compiler | C++17 support | GCC 7+ or Clang 5+ |
+| CMake | 3.10+ | Build system |
+| Google Test | any | Required for test suite (`find_package(GTest)`) |
+
+### Installing dependencies
+
+**macOS (Homebrew):**
+```bash
+brew install cmake googletest
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt install cmake g++ libgtest-dev
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -S cmake gtest
+```
+
+No external runtime dependencies — only the C++ standard library.
 
 ## Status
 
