@@ -1,6 +1,0 @@
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/logic_engine.dir
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/test_survey.dir
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/run_tests.dir
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/test.dir
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/edit_cache.dir
-/Users/nhatminh/dev/active/logic/logic_execution_engine/build/CMakeFiles/rebuild_cache.dir

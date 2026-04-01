@@ -1,1 +1,14 @@
+# Build
+build/
+
+# Clangd cache
+.cache/
+
+# IDE
+.vscode/
+
+# Symlink to build
+compile_commands.json
+
+# Personal
 apology.md
