@@ -8,7 +8,7 @@ using namespace logic::engine;
 // Helper: build MEMBER_OF(var, set_id)
 static AstNodeId makeMemberCheck(World& w, const std::string& var, ObjectId set_id) {
   auto ref = w.createAstNode(AstNodeType::REFERENCE, var);
-  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
+  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
   auto call = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(call, 0, ref);
   w.addAstChild(call, 1, lit);
@@ -97,7 +97,7 @@ TEST(AstQuantifiers, ForAllFalse) {
   // z NOT in target
 
   auto var = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto body = makeMemberCheck(w, "e", target->getId());
   auto forall = w.createAstNode(AstNodeType::QUANTIFIER, "FORALL");
   w.addAstChild(forall, 0, var);
@@ -123,7 +123,7 @@ TEST(AstQuantifiers, ForAllTrue) {
   w.addMember(y->getId(), target->getId());
 
   auto var = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto body = makeMemberCheck(w, "e", target->getId());
   auto forall = w.createAstNode(AstNodeType::QUANTIFIER, "FORALL");
   w.addAstChild(forall, 0, var);
@@ -149,7 +149,7 @@ TEST(AstQuantifiers, Exists) {
   // y NOT in target
 
   auto var = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto dom = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto body = makeMemberCheck(w, "e", target->getId());
   auto exists = w.createAstNode(AstNodeType::QUANTIFIER, "EXISTS");
   w.addAstChild(exists, 0, var);

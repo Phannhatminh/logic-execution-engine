@@ -8,7 +8,7 @@ using namespace logic::engine;
 // Helper: build an antecedent AST "MEMBER_OF(self, set_id)"
 static AstNodeId makeAntecedent(World& w, ObjectId set_id) {
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_set = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
+  auto lit_set = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_set);
@@ -18,7 +18,7 @@ static AstNodeId makeAntecedent(World& w, ObjectId set_id) {
 // Helper: build a MEMBER_OF(varname, set_id) AST node
 static AstNodeId makeMemberOf(World& w, const std::string& varname, ObjectId set_id) {
   auto ref = w.createAstNode(AstNodeType::REFERENCE, varname);
-  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
+  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref);
   w.addAstChild(mem, 1, lit);

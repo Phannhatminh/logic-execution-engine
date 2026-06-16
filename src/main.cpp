@@ -11,7 +11,7 @@ using namespace logic::engine;
 // ---------------------------------------------------------------------------
 static AstNodeId makeMemberOf(World& w, const std::string& var, ObjectId set_id) {
   auto ref = w.createAstNode(AstNodeType::REFERENCE, var);
-  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
+  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
   auto call = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(call, 0, ref);
   w.addAstChild(call, 1, lit);

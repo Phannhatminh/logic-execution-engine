@@ -23,7 +23,7 @@ Evaluator::Evaluator(World& world) : world_(world) {}
 EvalResult Evaluator::evaluate(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   if (!node) {
-    throw std::runtime_error("AST node not found: " + std::to_string(node_id.value));
+    throw std::runtime_error("AST node not found: " + std::to_string(node_id));
   }
 
   switch (node->node_type) {
@@ -50,7 +50,7 @@ storage::MembershipState Evaluator::evaluateState(core::AstNodeId node_id, const
   if (auto* s = std::get_if<MembershipState>(&result)) {
     return *s;
   }
-  throw std::runtime_error("Expected MembershipState result from AST node " + std::to_string(node_id.value));
+  throw std::runtime_error("Expected MembershipState result from AST node " + std::to_string(node_id));
 }
 
 // LITERAL: value is stored as string in the node
@@ -342,7 +342,7 @@ bool Evaluator::materialize(core::AstNodeId node_id, Bindings& bindings,
                             core::ObjectId default_object_id, core::ObjectId default_set_id) {
   const auto* node = world_.astNodeTable().find(node_id);
   if (!node) {
-    throw std::runtime_error("AST node not found during materialization: " + std::to_string(node_id.value));
+    throw std::runtime_error("AST node not found during materialization: " + std::to_string(node_id));
   }
 
   // Base case: LITERAL "true" — materialize the default fact (object ∈ target set)
@@ -457,7 +457,7 @@ bool Evaluator::materialize(core::AstNodeId node_id, Bindings& bindings,
       core::ObjectId elem_id = std::get<core::ObjectId>(result);
       core::Object* obj = world_.findObject(elem_id);
       if (!obj) {
-        throw std::runtime_error("CREATE_TUPLE: element not found: " + std::to_string(elem_id.value));
+        throw std::runtime_error("CREATE_TUPLE: element not found: " + std::to_string(elem_id));
       }
       elements.push_back(obj);
     }

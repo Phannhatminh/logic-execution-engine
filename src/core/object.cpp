@@ -14,7 +14,7 @@ ObjectType Object::getType() const { return ObjectType::Object; }
 
 bool Object::equals(const Object& other) const { return this == &other; }
 
-std::size_t Object::hashCode() const { return id_.value; }
+std::size_t Object::hashCode() const { return id_; }
 
 std::unique_ptr<Object> Object::clone() const {
   return std::make_unique<Object>(*this);

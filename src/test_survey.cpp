@@ -138,7 +138,7 @@ static void test_obligation_single_step() {
 
   // Obligation on mammals: if self ∈ dogs → true
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_dogs = w.createAstNode(AstNodeType::LITERAL, std::to_string(dogs->getId().value));
+  auto lit_dogs = w.createAstNode(AstNodeType::LITERAL, std::to_string(dogs->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_dogs);
@@ -165,7 +165,7 @@ static void test_ast_connectives() {
   // Helper: build MEMBER_OF(var, s) node
   auto make_member_check = [&](const std::string& var) -> AstNodeId {
     auto ref = w.createAstNode(AstNodeType::REFERENCE, var);
-    auto set_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(s->getId().value));
+    auto set_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(s->getId()));
     auto call = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
     w.addAstChild(call, 0, ref);
     w.addAstChild(call, 1, set_lit);
@@ -221,9 +221,9 @@ static void test_quantifiers() {
 
   // FORALL e IN domain: e ∈ target
   auto var_node = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto domain_ref = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto domain_ref = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto ref_e = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto target_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId().value));
+  auto target_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId()));
   auto body = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(body, 0, ref_e);
   w.addAstChild(body, 1, target_lit);
@@ -243,9 +243,9 @@ static void test_quantifiers() {
 
   // EXISTS e IN domain: e ∈ target (already true since x,y,z all in target)
   auto var_node2 = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto domain_ref2 = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto domain_ref2 = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto ref_e2 = w.createAstNode(AstNodeType::REFERENCE, "e");
-  auto target_lit2 = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId().value));
+  auto target_lit2 = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId()));
   auto body2 = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(body2, 0, ref_e2);
   w.addAstChild(body2, 1, target_lit2);
@@ -275,7 +275,7 @@ static void test_obligation_materialization() {
 
   // Obligation on B: if self ∈ A → grant membership
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId().value));
+  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_A);
@@ -309,7 +309,7 @@ static void test_obligation_chaining() {
 
   // Obligation on B: if self ∈ A → true
   auto ref_self1 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId().value));
+  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId()));
   auto ante1 = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante1, 0, ref_self1);
   w.addAstChild(ante1, 1, lit_A);
@@ -318,7 +318,7 @@ static void test_obligation_chaining() {
 
   // Obligation on C: if self ∈ B → true
   auto ref_self2 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId().value));
+  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId()));
   auto ante2 = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante2, 0, ref_self2);
   w.addAstChild(ante2, 1, lit_B);
@@ -352,20 +352,20 @@ static void test_compound_materialization() {
 
   // Obligation on B: if self ∈ A → MEMBER_OF(self, B) AND MEMBER_OF(self, C)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId().value));
+  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_A);
 
   // Consequent: MEMBER_OF(self, B) AND MEMBER_OF(self, C)
   auto ref_self2 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId().value));
+  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId()));
   auto mem_B = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_B, 0, ref_self2);
   w.addAstChild(mem_B, 1, lit_B);
 
   auto ref_self3 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_C = w.createAstNode(AstNodeType::LITERAL, std::to_string(C->getId().value));
+  auto lit_C = w.createAstNode(AstNodeType::LITERAL, std::to_string(C->getId()));
   auto mem_C = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_C, 0, ref_self3);
   w.addAstChild(mem_C, 1, lit_C);
@@ -425,14 +425,14 @@ static void test_not_materialization() {
   // Obligation on B: if self ∈ A → NOT(MEMBER_OF(self, B))
   // This means: if x is in A, then x is known to NOT be in B
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId().value));
+  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_A);
 
   // Consequent: NOT(MEMBER_OF(self, B))
   auto ref_self2 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId().value));
+  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId()));
   auto mem_B = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_B, 0, ref_self2);
   w.addAstChild(mem_B, 1, lit_B);
@@ -463,20 +463,20 @@ static void test_or_materialization() {
 
   // Obligation on B: if self ∈ A → MEMBER_OF(self, B) OR MEMBER_OF(self, C)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId().value));
+  auto lit_A = w.createAstNode(AstNodeType::LITERAL, std::to_string(A->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_A);
 
   // Consequent: MEMBER_OF(self, B) OR MEMBER_OF(self, C)
   auto ref_self2 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId().value));
+  auto lit_B = w.createAstNode(AstNodeType::LITERAL, std::to_string(B->getId()));
   auto mem_B = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_B, 0, ref_self2);
   w.addAstChild(mem_B, 1, lit_B);
 
   auto ref_self3 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_C = w.createAstNode(AstNodeType::LITERAL, std::to_string(C->getId().value));
+  auto lit_C = w.createAstNode(AstNodeType::LITERAL, std::to_string(C->getId()));
   auto mem_C = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_C, 0, ref_self3);
   w.addAstChild(mem_C, 1, lit_C);
@@ -519,7 +519,7 @@ static void test_create_entity_materialization() {
   // Obligation on target: if self ∈ trigger →
   //   CREATE_ENTITY("newobj") AND MEMBER_OF(newobj, target)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_trigger = w.createAstNode(AstNodeType::LITERAL, std::to_string(trigger->getId().value));
+  auto lit_trigger = w.createAstNode(AstNodeType::LITERAL, std::to_string(trigger->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_trigger);
@@ -528,7 +528,7 @@ static void test_create_entity_materialization() {
   auto create = w.createAstNode(AstNodeType::CREATE_ENTITY, "newobj");
 
   auto ref_new = w.createAstNode(AstNodeType::REFERENCE, "newobj");
-  auto lit_target = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId().value));
+  auto lit_target = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId()));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_new);
   w.addAstChild(mem, 1, lit_target);
@@ -565,20 +565,20 @@ static void test_create_tuple_materialization() {
   // Obligation on rel: if self ∈ domain →
   //   CREATE_TUPLE("pair", children: self, b_literal) AND MEMBER_OF(pair, rel)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_domain = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId().value));
+  auto lit_domain = w.createAstNode(AstNodeType::LITERAL, std::to_string(domain->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_domain);
 
   // Consequent: CREATE_TUPLE("pair") with elements (self, b) AND MEMBER_OF(pair, rel)
   auto ref_self2 = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_b = w.createAstNode(AstNodeType::LITERAL, std::to_string(b->getId().value));
+  auto lit_b = w.createAstNode(AstNodeType::LITERAL, std::to_string(b->getId()));
   auto create_tuple = w.createAstNode(AstNodeType::CREATE_TUPLE, "pair");
   w.addAstChild(create_tuple, 0, ref_self2);
   w.addAstChild(create_tuple, 1, lit_b);
 
   auto ref_pair = w.createAstNode(AstNodeType::REFERENCE, "pair");
-  auto lit_rel = w.createAstNode(AstNodeType::LITERAL, std::to_string(rel->getId().value));
+  auto lit_rel = w.createAstNode(AstNodeType::LITERAL, std::to_string(rel->getId()));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_pair);
   w.addAstChild(mem, 1, lit_rel);
@@ -620,7 +620,7 @@ static void test_create_set_materialization() {
   // Obligation on container: if self ∈ trigger →
   //   CREATE_SET("SET", varname="newset") AND MEMBER_OF(newset, container)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_trigger = w.createAstNode(AstNodeType::LITERAL, std::to_string(trigger->getId().value));
+  auto lit_trigger = w.createAstNode(AstNodeType::LITERAL, std::to_string(trigger->getId()));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_trigger);
@@ -631,7 +631,7 @@ static void test_create_set_materialization() {
   w.addAstChild(create_set, 0, var_ref);
 
   auto ref_newset = w.createAstNode(AstNodeType::REFERENCE, "newset");
-  auto lit_container = w.createAstNode(AstNodeType::LITERAL, std::to_string(container->getId().value));
+  auto lit_container = w.createAstNode(AstNodeType::LITERAL, std::to_string(container->getId()));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_newset);
   w.addAstChild(mem, 1, lit_container);
