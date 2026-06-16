@@ -45,6 +45,18 @@ An entity is a distinct individual in the universe. Two entities are equal if an
 
 A tuple is an ordered grouping of n objects (n ≥ 0). Tuples may be nested — an element of a tuple may itself be a tuple. Tuples are the structural unit for relations: a binary relation contains 2-tuples, an n-ary relation contains n-tuples.
 
+### R-O4a: Concrete Tuple
+
+A concrete tuple is one whose elements are fully specified at creation time. It is backed by a C++ `Tuple` object and its elements are stored in the Tuple Element Table.
+
+### R-O4b: Generic Tuple
+
+A generic (schematic) tuple is one introduced without fully specified elements — for example, "let t be an n-ary tuple over S." It is registered in the world with `SysType::TUPLE` but backed by a base `Object` at the C++ level. Its properties (arity, domain membership) are encoded as obligations. The engine shall not require the backing object to be upgraded when the tuple is later instantiated.
+
+### R-O4c: Tuple Equality
+
+A generic tuple and a concrete tuple may be declared equal via an equality relation — a set of 2-tuples in the membership matrix. This is the mechanism by which a generic tuple is instantiated: the proof establishes `(generic, concrete) ∈ E` for some equality relation E, without modifying the backing C++ objects of either.
+
 ### R-O5: Set
 
 A set is an object in which other objects can be members. Sets are objects and can themselves be members of other sets.
@@ -264,7 +276,65 @@ The engine shall be able to serialize all tables to disk and restore them, inclu
 
 ---
 
-## 10. Constraints
+## 10. Standard Library
+
+### R-SL1: Two-Level Architecture
+
+The engine shall maintain a strict separation between two levels:
+
+- **Foundation** — entities, sets, and membership. These are engine primitives and cannot be redefined.
+- **Standard library** — all concepts built on top of the foundation (tuples, relations, maps, natural numbers, arity, element access, equality). These are pre-constructed objects and obligations, not engine primitives.
+
+### R-SL2: Standard Library as World State
+
+Each standard library concept shall be expressed entirely as objects and obligations in the world — using only entities, sets, and membership as primitives. The engine shall contain no hardcoded knowledge of what a tuple, relation, map, or natural number is beyond their `SysType` bootstrap tag.
+
+### R-SL3: Standard Library Contents
+
+The engine shall ship with a standard library providing at minimum:
+
+- **TUPLE** — an object representing an ordered n-tuple, with arity and positional element access defined as obligations.
+- **REL** — a set whose members are tuples constrained by domain sets, defined as obligations.
+- **MAP** — a relation with a uniqueness constraint on inputs, defined as obligations.
+- **ℕ** — natural numbers as entities with Peano axioms as obligations.
+- **ARITY_OF** — a map from tuples to ℕ, populated automatically for concrete tuples at creation time.
+- **ELEMENT_AT** — a map from (tuple × ℕ) to objects, populated automatically for concrete tuples at creation time.
+- **Equality** — an equivalence relation with reflexivity, symmetry, and transitivity as obligations.
+
+### R-SL4: Dependency Order
+
+Standard library concepts shall be constructed in dependency order:
+
+```
+Foundation (entity, set, membership)
+    │
+    ▼
+ℕ
+    │
+    ▼
+ARITY_OF, ELEMENT_AT
+    │
+    ▼
+TUPLE semantics (arity and element obligations)
+    │
+    ▼
+REL semantics (domain constraints)
+    │
+    ▼
+MAP semantics (uniqueness constraint)
+```
+
+### R-SL5: User Optionality
+
+The standard library shall be optional. The user may choose to import any subset of it, or none at all, and define their own concepts from foundational primitives. The engine shall not impose standard library definitions on the user's world.
+
+### R-SL6: Automatic Population for Concrete Objects
+
+When a concrete tuple is created, the engine shall automatically assert the corresponding facts in `ARITY_OF` and `ELEMENT_AT` — recording `(t, n) ∈ ARITY_OF` and `(t, i, eᵢ) ∈ ELEMENT_AT` for each element — provided those maps have been loaded from the standard library. If they have not been loaded, no automatic population occurs.
+
+---
+
+## 11. Constraints
 
 ### R-C1: No Built-In Arithmetic
 

@@ -10,14 +10,6 @@ World::World() {
 void World::bootstrap() {
   // Create the five built-in type sets as objects in T.
   // Each is an Object with sys_type SET (they are sets themselves).
-  core::SysType types[] = {
-    core::SysType::SET,
-    core::SysType::REL,
-    core::SysType::MAP,
-    core::SysType::ENTITY,
-    core::SysType::TUPLE
-  };
-
   for (int i = 0; i < 5; ++i) {
     auto obj = std::make_unique<core::Object>();
     std::size_t id = obj->getId();
@@ -87,13 +79,13 @@ core::Tuple* World::createTuple(std::vector<core::Object*> elements) {
 bool World::addMember(std::size_t object_id, std::size_t set_id) {
   bool inserted = membershipTable_.insert(object_id, set_id);
   if (inserted) {
-    membershipMatrix_.set(object_id, set_id);
+    membershipMatrix_.set(object_id, set_id, storage::MembershipState::MEMBER);
   }
   return inserted;
 }
 
 bool World::setNonMember(std::size_t object_id, std::size_t set_id) {
-  membershipMatrix_.setNonMember(object_id, set_id);
+  membershipMatrix_.set(object_id, set_id, storage::MembershipState::NON_MEMBER);
   // Remove from membership table if it was previously a member
   membershipTable_.remove(object_id, set_id);
   return true;
@@ -102,21 +94,25 @@ bool World::setNonMember(std::size_t object_id, std::size_t set_id) {
 bool World::removeMember(std::size_t object_id, std::size_t set_id) {
   bool removed = membershipTable_.remove(object_id, set_id);
   if (removed) {
-    membershipMatrix_.clear(object_id, set_id);
+    membershipMatrix_.set(object_id, set_id, storage::MembershipState::UNKNOWN);
   }
   return removed;
 }
 
+storage::MembershipState World::membershipState(std::size_t object_id, std::size_t set_id) const {
+  return membershipMatrix_.query(object_id, set_id);
+}
+
 bool World::isMember(std::size_t object_id, std::size_t set_id) const {
-  return membershipMatrix_.test(object_id, set_id);
+  return membershipState(object_id, set_id) == storage::MembershipState::MEMBER;
 }
 
 bool World::isNonMember(std::size_t object_id, std::size_t set_id) const {
-  return membershipMatrix_.testNonMember(object_id, set_id);
+  return membershipState(object_id, set_id) == storage::MembershipState::NON_MEMBER;
 }
 
 bool World::isUnknown(std::size_t object_id, std::size_t set_id) const {
-  return membershipMatrix_.query(object_id, set_id) == storage::MembershipState::UNKNOWN;
+  return membershipState(object_id, set_id) == storage::MembershipState::UNKNOWN;
 }
 
 std::vector<std::size_t> World::membersOf(std::size_t set_id) const {

@@ -4,6 +4,18 @@
 
 namespace logic::engine {
 
+using storage::MembershipState;
+
+// NOT, per Kleene K3: M <-> N, U <-> U.
+static MembershipState ternaryNot(MembershipState a) {
+  switch (a) {
+    case MembershipState::MEMBER:     return MembershipState::NON_MEMBER;
+    case MembershipState::NON_MEMBER: return MembershipState::MEMBER;
+    case MembershipState::UNKNOWN:    return MembershipState::UNKNOWN;
+  }
+  return MembershipState::UNKNOWN;
+}
+
 Evaluator::Evaluator(World& world) : world_(world) {}
 
 // Main dispatch
@@ -30,21 +42,25 @@ EvalResult Evaluator::evaluate(std::size_t node_id, const Bindings& bindings) co
 }
 
 bool Evaluator::evaluateBool(std::size_t node_id, const Bindings& bindings) const {
+  return evaluateState(node_id, bindings) == MembershipState::MEMBER;
+}
+
+storage::MembershipState Evaluator::evaluateState(std::size_t node_id, const Bindings& bindings) const {
   EvalResult result = evaluate(node_id, bindings);
-  if (auto* b = std::get_if<bool>(&result)) {
-    return *b;
+  if (auto* s = std::get_if<MembershipState>(&result)) {
+    return *s;
   }
-  throw std::runtime_error("Expected bool result from AST node " + std::to_string(node_id));
+  throw std::runtime_error("Expected MembershipState result from AST node " + std::to_string(node_id));
 }
 
 // LITERAL: value is stored as string in the node
-// "true"/"false" → bool, numeric string → size_t, otherwise → string
+// "true"/"false" → MembershipState, numeric string → size_t, otherwise → string
 EvalResult Evaluator::evalLiteral(std::size_t node_id) const {
   const auto* node = world_.astNodeTable().find(node_id);
   const std::string& val = node->value;
 
-  if (val == "true") return true;
-  if (val == "false") return false;
+  if (val == "true") return MembershipState::MEMBER;
+  if (val == "false") return MembershipState::NON_MEMBER;
 
   // Try numeric
   try {
@@ -79,14 +95,22 @@ EvalResult Evaluator::evalUnaryOp(std::size_t node_id, const Bindings& bindings)
   }
 
   if (node->value == "NOT") {
-    return !evaluateBool(children[0].child_node_id, bindings);
+    return ternaryNot(evaluateState(children[0].child_node_id, bindings));
   }
 
   throw std::runtime_error("Unknown unary operator: " + node->value);
 }
 
-// BINARY_OP: value is the operator ("AND", "OR", "EQUALS")
+// BINARY_OP: value is the operator ("AND", "OR", "EQUALS", "IMPLIES")
 // children at position 0 and 1 are the operands
+//
+// AND/OR/IMPLIES follow Kleene K3 three-valued logic. Short-circuiting only
+// happens on the operand value that fully determines the result:
+//   AND(left, right): left=N  → N, without evaluating right
+//   OR(left, right):  left=M  → M, without evaluating right
+//   IMPLIES(A, B):    A=N     → M, without evaluating B (vacuously true)
+// In all other cases (including left/A = UNKNOWN) the right operand must be
+// evaluated, since UNKNOWN alone never determines the result.
 EvalResult Evaluator::evalBinaryOp(std::size_t node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   auto children = world_.astChildTable().childrenOf(node_id);
@@ -99,27 +123,40 @@ EvalResult Evaluator::evalBinaryOp(std::size_t node_id, const Bindings& bindings
   std::size_t right_id = children[1].child_node_id;
 
   if (node->value == "AND") {
-    // Short-circuit: if left is false, don't evaluate right
-    if (!evaluateBool(left_id, bindings)) return false;
-    return evaluateBool(right_id, bindings);
+    MembershipState left = evaluateState(left_id, bindings);
+    if (left == MembershipState::NON_MEMBER) return MembershipState::NON_MEMBER;
+    MembershipState right = evaluateState(right_id, bindings);
+    if (left == MembershipState::MEMBER) return right;
+    // left == UNKNOWN
+    return right == MembershipState::NON_MEMBER ? MembershipState::NON_MEMBER
+                                                  : MembershipState::UNKNOWN;
   }
 
   if (node->value == "OR") {
-    // Short-circuit: if left is true, don't evaluate right
-    if (evaluateBool(left_id, bindings)) return true;
-    return evaluateBool(right_id, bindings);
+    MembershipState left = evaluateState(left_id, bindings);
+    if (left == MembershipState::MEMBER) return MembershipState::MEMBER;
+    MembershipState right = evaluateState(right_id, bindings);
+    if (left == MembershipState::NON_MEMBER) return right;
+    // left == UNKNOWN
+    return right == MembershipState::MEMBER ? MembershipState::MEMBER
+                                             : MembershipState::UNKNOWN;
   }
 
   if (node->value == "EQUALS") {
     EvalResult left = evaluate(left_id, bindings);
     EvalResult right = evaluate(right_id, bindings);
-    return left == right;
+    return (left == right) ? MembershipState::MEMBER : MembershipState::NON_MEMBER;
   }
 
   if (node->value == "IMPLIES") {
-    // A → B is equivalent to ¬A ∨ B
-    if (!evaluateBool(left_id, bindings)) return true;
-    return evaluateBool(right_id, bindings);
+    // A → B, per Kleene K3: A=N → M (vacuous) without evaluating B.
+    MembershipState a = evaluateState(left_id, bindings);
+    if (a == MembershipState::NON_MEMBER) return MembershipState::MEMBER;
+    MembershipState b = evaluateState(right_id, bindings);
+    if (a == MembershipState::MEMBER) return b;
+    // a == UNKNOWN
+    return b == MembershipState::MEMBER ? MembershipState::MEMBER
+                                         : MembershipState::UNKNOWN;
   }
 
   throw std::runtime_error("Unknown binary operator: " + node->value);
@@ -150,26 +187,34 @@ EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindin
 
   std::size_t body_id = children[2].child_node_id;
 
+  // FORALL is an iterated AND: stops early only on a NON_MEMBER body
+  // (a definite counterexample). A member whose body is UNKNOWN doesn't
+  // determine the result — scanning continues, and the result is UNKNOWN
+  // unless a later member is NON_MEMBER. Empty domain → MEMBER (vacuous).
   if (node->value == "FORALL") {
+    bool sawUnknown = false;
     for (std::size_t member_id : members) {
       Bindings newBindings = bindings;
       newBindings[varName] = member_id;
-      if (!evaluateBool(body_id, newBindings)) {
-        return false;
-      }
+      MembershipState body = evaluateState(body_id, newBindings);
+      if (body == MembershipState::NON_MEMBER) return MembershipState::NON_MEMBER;
+      if (body == MembershipState::UNKNOWN) sawUnknown = true;
     }
-    return true;
+    return sawUnknown ? MembershipState::UNKNOWN : MembershipState::MEMBER;
   }
 
+  // EXISTS is an iterated OR: stops early only on a MEMBER body (a witness).
+  // Empty domain → NON_MEMBER.
   if (node->value == "EXISTS") {
+    bool sawUnknown = false;
     for (std::size_t member_id : members) {
       Bindings newBindings = bindings;
       newBindings[varName] = member_id;
-      if (evaluateBool(body_id, newBindings)) {
-        return true;
-      }
+      MembershipState body = evaluateState(body_id, newBindings);
+      if (body == MembershipState::MEMBER) return MembershipState::MEMBER;
+      if (body == MembershipState::UNKNOWN) sawUnknown = true;
     }
-    return false;
+    return sawUnknown ? MembershipState::UNKNOWN : MembershipState::NON_MEMBER;
   }
 
   throw std::runtime_error("Unknown quantifier: " + node->value);
@@ -191,7 +236,7 @@ EvalResult Evaluator::evalFunctionCall(std::size_t node_id, const Bindings& bind
     std::size_t obj_id = std::get<std::size_t>(objResult);
     std::size_t set_id = std::get<std::size_t>(setResult);
 
-    return world_.isMember(obj_id, set_id);
+    return world_.membershipState(obj_id, set_id);
   }
 
   throw std::runtime_error("Unknown function: " + node->value);

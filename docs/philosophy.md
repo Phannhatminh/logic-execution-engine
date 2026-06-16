@@ -38,6 +38,36 @@ Everything else — subset, equality, function application, induction, contradic
 
 This means proofs in the engine are longer and more explicit than proofs written on paper. That is the point. The paper proof says "by transitivity of subset." The engine proof shows what transitivity of subset actually is: two applications of the definition, chained through a shared membership fact.
 
+## Two Levels: Foundation and Standard Library
+
+The engine has exactly two levels. They are not a spectrum — they are a hard boundary.
+
+**Foundation** — entities, sets, and membership. These are the only true primitives. The engine cannot operate without them, and they cannot be redefined. An entity is an atom with an identity. A set is an object that other objects can be members of. Membership is the only relation. Everything else reduces to these three things.
+
+**Standard library** — everything built on top of the foundation. This includes concepts the engine ships with as conveniences: tuples, relations, maps, natural numbers, arity, element access, equality. None of these are engine primitives. They are objects and obligations — pre-constructed world states — built entirely from entities, sets, and membership. The engine has no opinion on what a tuple "is." The meaning of tuple lives in the obligations of the standard library, not in the engine.
+
+The `SysType` tags `TUPLE`, `REL`, `MAP` reflect this: they are not engine primitives, they are shortcuts for bootstrapping the corresponding standard library objects at world creation. A user who wants a different notion of tuple can ignore these tags entirely and construct their own.
+
+## The Standard Library
+
+The standard library is a collection of pre-constructed objects and obligations that the engine offers as a starting point. It is not loaded automatically — the user chooses which parts to import. What the standard library provides:
+
+- **TUPLE** — the concept of an ordered n-tuple: an object with arity and positional element access.
+- **REL** — the concept of a relation: a set whose members are tuples drawn from specified domains.
+- **MAP** — the concept of a map/function: a relation with a uniqueness constraint on inputs.
+- **ℕ** — the natural numbers: entities with Peano axioms as obligations.
+- **ARITY_OF** — a map from tuples to ℕ, encoding arity.
+- **ELEMENT_AT** — a map from (tuple, ℕ) to objects, encoding positional access.
+- **Equality** — an equivalence relation with standard axioms (reflexivity, symmetry, transitivity).
+
+These are built in dependency order: `ℕ` before `ARITY_OF`, `ARITY_OF` and `ELEMENT_AT` before `REL`, `REL` before `MAP`. Each layer is expressed entirely in terms of the layer below it.
+
+## User Freedom
+
+The user is not required to use any part of the standard library. If they want a constructivist notion of natural numbers, a non-standard equality, or a completely different concept of tuple, they define it themselves from the foundational primitives. The engine will not conflict — it has no built-in expectations about any of these concepts.
+
+The standard library is the engine's answer to: "here is one well-defined way to build these concepts." The user's answer can be different. Both are valid as long as they reduce to entities, sets, and membership at the bottom.
+
 ## Libraries as a Layer on Top
 
 Once the engine can verify proofs at the definition level, a library system can be built on top. A library is a collection of pre-proven theorems — packaged as reusable proof steps. A library might provide:
@@ -48,7 +78,7 @@ Once the engine can verify proofs at the definition level, a library system can 
 
 Libraries do not change the engine. They are proofs that have already been verified. Using a library theorem is an appeal to a previously completed proof — the engine trusts it because it (or a prior run) already checked every step.
 
-The engine itself remains minimal. It knows four operations. Libraries provide the vocabulary of mathematics. The separation is clean: the engine is the logic; libraries are the mathematics.
+The engine itself remains minimal. It knows four operations. The standard library provides the foundational vocabulary. User libraries provide the mathematical content. The separation is clean at every level: the engine is the logic; the standard library is the substrate; user libraries are the mathematics.
 
 ## Why This Matters
 

@@ -17,14 +17,8 @@ enum class MembershipState {
 
 class MembershipMatrix {
 public:
-  // Set M[object_id][set_id] = MEMBER (1)
-  void set(std::size_t object_id, std::size_t set_id);
-
-  // Set M[object_id][set_id] = NON_MEMBER (0)
-  void setNonMember(std::size_t object_id, std::size_t set_id);
-
-  // Set M[object_id][set_id] = UNKNOWN (clear both bits)
-  void clear(std::size_t object_id, std::size_t set_id);
+  // Set M[object_id][set_id] to the given state
+  void set(std::size_t object_id, std::size_t set_id, MembershipState state);
 
   // Test if M[object_id][set_id] == MEMBER
   bool test(std::size_t object_id, std::size_t set_id) const;

@@ -31,6 +31,7 @@ public:
   bool isMember(std::size_t object_id, std::size_t set_id) const;
   bool isNonMember(std::size_t object_id, std::size_t set_id) const;
   bool isUnknown(std::size_t object_id, std::size_t set_id) const;
+  storage::MembershipState membershipState(std::size_t object_id, std::size_t set_id) const;
 
   // Membership matrix queries
   std::vector<std::size_t> membersOf(std::size_t set_id) const;

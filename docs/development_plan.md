@@ -36,6 +36,8 @@ Implement n-ary Tuple as a subclass of Object.
 - `toString()` returns "(elem0, elem1, ...)"
 - `clone()` returns a new Tuple with cloned elements
 
+**Note:** This implements *concrete* tuples only. Generic tuple support is a separate planned feature (see Phase 9).
+
 ### 1.3 — Extend types.hpp
 
 Add sys_type enum alongside the existing core ObjectType.
@@ -194,6 +196,70 @@ Read tables from files, reconstruct in-memory objects, rebuild the Membership Ma
 
 ---
 
+## Phase 8: Standard Library
+
+Build the standard library as pre-constructed world state — objects and obligations expressed entirely in terms of the foundational primitives.
+
+### 8.1 — ℕ (Natural Numbers)
+
+- Create a set object `ℕ` in the world
+- Bootstrap entities for `0`, `1`, `2`, ... as needed, or define them via a successor relation
+- Add Peano axioms as obligations: zero is a natural number, successor of a natural number is a natural number, no two numbers have the same successor, zero is not a successor
+
+### 8.2 — ARITY_OF
+
+- Create a `SysType::MAP` object `ARITY_OF` with domain `TUPLE` and codomain `ℕ`
+- When a concrete tuple of arity n is created, automatically assert `(t, n) ∈ ARITY_OF`
+- For generic tuples, the proof asserts this manually
+
+### 8.3 — ELEMENT_AT
+
+- Create a `SysType::MAP` object `ELEMENT_AT` with domain `TUPLE × ℕ` and codomain the universe
+- When a concrete tuple is created, automatically assert `((t, i), eᵢ) ∈ ELEMENT_AT` for each position i
+- For generic tuples, the proof asserts this manually
+
+### 8.4 — TUPLE semantics
+
+- Add obligations enforcing what it means to be a TUPLE: every TUPLE object has exactly one arity under `ARITY_OF`, and for each position `i < arity`, there exists exactly one element under `ELEMENT_AT`
+
+### 8.5 — REL semantics
+
+- Add obligations enforcing what it means to be a REL: every member must be a TUPLE, its arity must match the relation's declared arity, and each element at position i must belong to the declared domain set Sᵢ
+
+### 8.6 — MAP semantics
+
+- Add obligations enforcing what it means to be a MAP: it is a REL with the additional uniqueness constraint — no two members may share the same input positions
+
+### 8.7 — Equality
+
+- Create an equivalence relation `EQ` with obligations for reflexivity, symmetry, and transitivity
+- This is the standard equality — users may define additional or alternative equality relations
+
+### 8.8 — Library loading mechanism
+
+- Define a mechanism for selectively loading parts of the standard library into the world at startup
+- The user specifies which library modules to import; the engine bootstraps the corresponding objects and obligations before proof execution begins
+
+---
+
+## Phase 9: Generic Tuples
+
+With the standard library in place — specifically `ℕ`, `ARITY_OF`, and `ELEMENT_AT` — generic tuples can now be fully implemented.
+
+### 9.1 — Generic tuple creation
+
+Add `World::createGenericTuple()` that registers a `SysType::TUPLE` object backed by a base `Object` (not a `Tuple`). No entries are written to the Tuple Element Table. The object's tuple-hood is expressed through its `SysType` tag and obligations in O using `ARITY_OF` and `ELEMENT_AT`.
+
+### 9.2 — Distinguish concrete from generic at the object table level
+
+The Object Table already stores both `core_type` and `sys_type`. A generic tuple has `core_type = OBJECT` and `sys_type = TUPLE`. A concrete tuple has `core_type = TUPLE` and `sys_type = TUPLE`. No schema change is needed — the distinction is already encodable.
+
+### 9.3 — Equality between generic and concrete tuples
+
+Equality is a relation — a set of 2-tuples in the membership matrix. The proof establishes `(generic_tuple, concrete_tuple) ∈ EQ` by asserting membership of the 2-tuple in the standard equality relation. The engine never modifies the backing C++ objects of either party.
+
+---
+
 ## Dependency Order
 
 ```
@@ -214,8 +280,13 @@ Phase 5 (AST Evaluation)
     ▼
 Phase 6 (Parser)
     │
+    ├──▶ Phase 7 (Persistence)
+    │
     ▼
-Phase 7 (Persistence)
+Phase 8 (Standard Library)
+    │
+    ▼
+Phase 9 (Generic Tuples)
 ```
 
-Each phase depends on the ones above it. Phases cannot be reordered, but work within a phase can be parallelized.
+Each phase depends on the ones above it. Phases cannot be reordered, but work within a phase can be parallelized. Phase 8 depends on the full engine (Phases 1–6) being complete, since the standard library is expressed in language L and executed against the world. Phase 9 depends on Phase 8 because generic tuple constraints require `ℕ`, `ARITY_OF`, and `ELEMENT_AT` to exist in the world.

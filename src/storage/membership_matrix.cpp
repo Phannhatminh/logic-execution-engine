@@ -1,5 +1,6 @@
 #include "storage/membership_matrix.hpp"
 #include "storage/membership_table.hpp"
+#include <cassert>
 
 namespace logic::storage {
 
@@ -54,71 +55,39 @@ std::size_t MembershipMatrix::setBitPos(std::size_t set_id) {
 
 // Core operations
 
-void MembershipMatrix::set(std::size_t object_id, std::size_t set_id) {
+void MembershipMatrix::set(std::size_t object_id, std::size_t set_id, MembershipState state) {
+  if (state == MembershipState::UNKNOWN) {
+    auto setIt = setIndex_.find(set_id);
+    auto objIt = objectIndex_.find(object_id);
+    if (setIt == setIndex_.end() || objIt == objectIndex_.end()) return;
+    clearBit(objectKnown_[object_id], setIt->second);
+    clearBit(objectValue_[object_id], setIt->second);
+    clearBit(setKnown_[set_id], objIt->second);
+    clearBit(setValue_[set_id], objIt->second);
+    return;
+  }
+
   std::size_t obj_pos = objectBitPos(object_id);
   std::size_t set_pos = setBitPos(set_id);
 
-  // Row: set known=1, value=1
   setBit(objectKnown_[object_id], set_pos);
-  setBit(objectValue_[object_id], set_pos);
-
-  // Column: set known=1, value=1
   setBit(setKnown_[set_id], obj_pos);
-  setBit(setValue_[set_id], obj_pos);
-}
 
-void MembershipMatrix::setNonMember(std::size_t object_id, std::size_t set_id) {
-  std::size_t obj_pos = objectBitPos(object_id);
-  std::size_t set_pos = setBitPos(set_id);
-
-  // Row: set known=1, value=0
-  setBit(objectKnown_[object_id], set_pos);
-  clearBit(objectValue_[object_id], set_pos);
-
-  // Column: set known=1, value=0
-  setBit(setKnown_[set_id], obj_pos);
-  clearBit(setValue_[set_id], obj_pos);
-}
-
-void MembershipMatrix::clear(std::size_t object_id, std::size_t set_id) {
-  auto setIt = setIndex_.find(set_id);
-  auto objIt = objectIndex_.find(object_id);
-  if (setIt == setIndex_.end() || objIt == objectIndex_.end()) return;
-
-  // Row: clear both known and value
-  clearBit(objectKnown_[object_id], setIt->second);
-  clearBit(objectValue_[object_id], setIt->second);
-
-  // Column: clear both known and value
-  clearBit(setKnown_[set_id], objIt->second);
-  clearBit(setValue_[set_id], objIt->second);
+  if (state == MembershipState::MEMBER) {
+    setBit(objectValue_[object_id], set_pos);
+    setBit(setValue_[set_id], obj_pos);
+  } else {
+    clearBit(objectValue_[object_id], set_pos);
+    clearBit(setValue_[set_id], obj_pos);
+  }
 }
 
 bool MembershipMatrix::test(std::size_t object_id, std::size_t set_id) const {
-  // Returns true only if known=1 AND value=1
-  auto setIt = setIndex_.find(set_id);
-  if (setIt == setIndex_.end()) return false;
-
-  auto valIt = objectValue_.find(object_id);
-  if (valIt == objectValue_.end()) return false;
-
-  return testBit(valIt->second, setIt->second);
+  return query(object_id, set_id) == MembershipState::MEMBER;
 }
 
 bool MembershipMatrix::testNonMember(std::size_t object_id, std::size_t set_id) const {
-  // Returns true only if known=1 AND value=0
-  auto setIt = setIndex_.find(set_id);
-  if (setIt == setIndex_.end()) return false;
-
-  auto knownIt = objectKnown_.find(object_id);
-  if (knownIt == objectKnown_.end()) return false;
-
-  if (!testBit(knownIt->second, setIt->second)) return false;
-
-  auto valIt = objectValue_.find(object_id);
-  if (valIt == objectValue_.end()) return true;  // known but no value bits → value=0
-
-  return !testBit(valIt->second, setIt->second);
+  return query(object_id, set_id) == MembershipState::NON_MEMBER;
 }
 
 MembershipState MembershipMatrix::query(std::size_t object_id, std::size_t set_id) const {
@@ -130,9 +99,8 @@ MembershipState MembershipMatrix::query(std::size_t object_id, std::size_t set_i
 
   if (!testBit(knownIt->second, setIt->second)) return MembershipState::UNKNOWN;
 
+  assert(objectValue_.count(object_id) > 0);
   auto valIt = objectValue_.find(object_id);
-  if (valIt == objectValue_.end()) return MembershipState::NON_MEMBER;
-
   return testBit(valIt->second, setIt->second) ? MembershipState::MEMBER : MembershipState::NON_MEMBER;
 }
 
@@ -261,7 +229,7 @@ std::vector<std::size_t> MembershipMatrix::difference(std::size_t set_a, std::si
 void MembershipMatrix::loadFrom(const MembershipTable& table) {
   reset();
   for (const auto& row : table.allRows()) {
-    set(row.object_id, row.set_id);
+    set(row.object_id, row.set_id, MembershipState::MEMBER);
   }
 }
 

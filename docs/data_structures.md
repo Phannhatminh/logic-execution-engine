@@ -22,6 +22,8 @@ Subclass of Object. An ordered grouping of Objects.
 - A 2-tuple (a, b) is the fundamental unit for binary relations.
 - N-tuples of arbitrary arity are supported.
 
+**Note:** `Tuple` (C++ class) represents only *concrete* tuples — those whose elements are fully known at creation time. Generic or schematic tuples (e.g. "an n-ary tuple over S") are not backed by this class. See the logic engine layer section on TUPLE for the full picture.
+
 ---
 
 ## Logic Engine Layer
@@ -51,6 +53,20 @@ Each level adds membership constraints, enforced as obligations:
 - **MAP** — A REL with the additional constraint that each input (all positions except the last) maps to exactly one output.
 
 Since REL ⊆ SET and MAP ⊆ REL, every MAP is a REL and every REL is a SET. Storage is uniform — all are sets in the membership matrix. The type determines which obligations guard membership.
+
+### TUPLE: Concrete vs Generic
+
+`SysType::TUPLE` marks an object as a tuple *in the mathematical world*. But the backing C++ representation depends on whether the tuple is concrete or generic:
+
+**Concrete tuple** — elements are fully known at creation time. The world registers a `SysType::TUPLE` object backed by a C++ `Tuple` instance. Elements are stored positionally in the `TupleElementTable`.
+
+**Generic (schematic) tuple** — the user introduces a tuple of some arity n without specifying concrete elements (e.g. "let t be an n-ary tuple over S"). The world registers a `SysType::TUPLE` object backed by a base `Object` instance — no element structure exists at the C++ level. The tuple's properties (arity, domain constraints) are encoded entirely as obligations in O.
+
+The two can be declared **equal** via an equality relation — a set of 2-tuples `(generic, concrete)` in the membership matrix. This is the standard mechanism for instantiating a generic tuple: the proof establishes equality between the generic object and a concrete tuple without the engine ever needing to "upgrade" the backing C++ object.
+
+> **Status: planned (Phase 9).** Currently `World::createTuple` always produces a concrete tuple backed by `ObjectType::Tuple`. Support for generic tuples (backed by `ObjectType::Object`) and the associated equality mechanism depends on the standard library (Phase 8) providing `ℕ`, `ARITY_OF`, and `ELEMENT_AT` first.
+
+---
 
 ### Set
 
