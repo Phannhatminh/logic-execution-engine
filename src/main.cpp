@@ -9,9 +9,9 @@ using namespace logic::engine;
 // ---------------------------------------------------------------------------
 // Helper: build MEMBER_OF(varname, set_id) AST node
 // ---------------------------------------------------------------------------
-static std::size_t makeMemberOf(World& w, const std::string& var, std::size_t set_id) {
+static AstNodeId makeMemberOf(World& w, const std::string& var, ObjectId set_id) {
   auto ref = w.createAstNode(AstNodeType::REFERENCE, var);
-  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
+  auto lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
   auto call = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(call, 0, ref);
   w.addAstChild(call, 1, lit);

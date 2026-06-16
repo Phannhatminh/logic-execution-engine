@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+#include "core/ids.hpp"
 #include "core/types.hpp"
 #include "core/object.hpp"
 #include "core/entity.hpp"
@@ -25,34 +26,34 @@ public:
   core::Tuple* createTuple(std::vector<core::Object*> elements);
 
   // Membership
-  bool addMember(std::size_t object_id, std::size_t set_id);
-  bool setNonMember(std::size_t object_id, std::size_t set_id);
-  bool removeMember(std::size_t object_id, std::size_t set_id);
-  bool isMember(std::size_t object_id, std::size_t set_id) const;
-  bool isNonMember(std::size_t object_id, std::size_t set_id) const;
-  bool isUnknown(std::size_t object_id, std::size_t set_id) const;
-  storage::MembershipState membershipState(std::size_t object_id, std::size_t set_id) const;
+  bool addMember(core::ObjectId object_id, core::ObjectId set_id);
+  bool setNonMember(core::ObjectId object_id, core::ObjectId set_id);
+  bool removeMember(core::ObjectId object_id, core::ObjectId set_id);
+  bool isMember(core::ObjectId object_id, core::ObjectId set_id) const;
+  bool isNonMember(core::ObjectId object_id, core::ObjectId set_id) const;
+  bool isUnknown(core::ObjectId object_id, core::ObjectId set_id) const;
+  storage::MembershipState membershipState(core::ObjectId object_id, core::ObjectId set_id) const;
 
   // Membership matrix queries
-  std::vector<std::size_t> membersOf(std::size_t set_id) const;
-  std::vector<std::size_t> setsOf(std::size_t object_id) const;
-  std::vector<std::size_t> intersect(std::size_t set_a, std::size_t set_b) const;
-  std::vector<std::size_t> unite(std::size_t set_a, std::size_t set_b) const;
-  std::vector<std::size_t> difference(std::size_t set_a, std::size_t set_b) const;
+  std::vector<core::ObjectId> membersOf(core::ObjectId set_id) const;
+  std::vector<core::ObjectId> setsOf(core::ObjectId object_id) const;
+  std::vector<core::ObjectId> intersect(core::ObjectId set_a, core::ObjectId set_b) const;
+  std::vector<core::ObjectId> unite(core::ObjectId set_a, core::ObjectId set_b) const;
+  std::vector<core::ObjectId> difference(core::ObjectId set_a, core::ObjectId set_b) const;
 
   // Obligations
-  std::size_t addObligation(std::size_t target_id, std::size_t antecedent_root_id, std::size_t consequent_root_id);
+  core::ObligationId addObligation(core::ObjectId target_id, core::AstNodeId antecedent_root_id, core::AstNodeId consequent_root_id);
 
   // AST construction
-  std::size_t createAstNode(core::AstNodeType node_type, const std::string& value = "");
-  void addAstChild(std::size_t parent_node_id, std::size_t position, std::size_t child_node_id);
+  core::AstNodeId createAstNode(core::AstNodeType node_type, const std::string& value = "");
+  void addAstChild(core::AstNodeId parent_node_id, std::size_t position, core::AstNodeId child_node_id);
 
   // Lookup
-  core::Object* findObject(std::size_t id);
-  const core::Object* findObject(std::size_t id) const;
+  core::Object* findObject(core::ObjectId id);
+  const core::Object* findObject(core::ObjectId id) const;
 
   // Bootstrap type set IDs
-  std::size_t typeSetId(core::SysType sys_type) const;
+  core::ObjectId typeSetId(core::SysType sys_type) const;
 
   // Table access
   const storage::ObjectTable& objectTable() const;
@@ -77,7 +78,7 @@ private:
   storage::ObligationTable obligationTable_;
 
   // Bootstrap type set IDs
-  std::size_t typeSetIds_[5]; // indexed by SysType enum
+  core::ObjectId typeSetIds_[5]; // indexed by SysType enum
 
   void bootstrap();
 };

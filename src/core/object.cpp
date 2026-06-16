@@ -4,17 +4,17 @@ namespace logic::core {
 
 std::atomic<std::size_t> Object::nextId_{0};
 
-Object::Object() : id_(nextId_++) {}
+Object::Object() : id_(ObjectId{nextId_++}) {}
 
-Object::Object(std::size_t id) : id_(id) {}
+Object::Object(ObjectId id) : id_(id) {}
 
-std::size_t Object::getId() const { return id_; }
+ObjectId Object::getId() const { return id_; }
 
 ObjectType Object::getType() const { return ObjectType::Object; }
 
 bool Object::equals(const Object& other) const { return this == &other; }
 
-std::size_t Object::hashCode() const { return id_; }
+std::size_t Object::hashCode() const { return id_.value; }
 
 std::unique_ptr<Object> Object::clone() const {
   return std::make_unique<Object>(*this);

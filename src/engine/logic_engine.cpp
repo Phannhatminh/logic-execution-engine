@@ -12,7 +12,7 @@ void World::bootstrap() {
   // Each is an Object with sys_type SET (they are sets themselves).
   for (int i = 0; i < 5; ++i) {
     auto obj = std::make_unique<core::Object>();
-    std::size_t id = obj->getId();
+    core::ObjectId id = obj->getId();
     typeSetIds_[i] = id;
     objectTable_.insert(obj.get(), core::SysType::SET);
     objects_.push_back(std::move(obj));
@@ -27,7 +27,7 @@ void World::bootstrap() {
             typeSetIds_[static_cast<int>(core::SysType::REL)]);
 }
 
-std::size_t World::typeSetId(core::SysType sys_type) const {
+core::ObjectId World::typeSetId(core::SysType sys_type) const {
   return typeSetIds_[static_cast<int>(sys_type)];
 }
 
@@ -76,7 +76,7 @@ core::Tuple* World::createTuple(std::vector<core::Object*> elements) {
 
 // Membership
 
-bool World::addMember(std::size_t object_id, std::size_t set_id) {
+bool World::addMember(core::ObjectId object_id, core::ObjectId set_id) {
   bool inserted = membershipTable_.insert(object_id, set_id);
   if (inserted) {
     membershipMatrix_.set(object_id, set_id, storage::MembershipState::MEMBER);
@@ -84,14 +84,14 @@ bool World::addMember(std::size_t object_id, std::size_t set_id) {
   return inserted;
 }
 
-bool World::setNonMember(std::size_t object_id, std::size_t set_id) {
+bool World::setNonMember(core::ObjectId object_id, core::ObjectId set_id) {
   membershipMatrix_.set(object_id, set_id, storage::MembershipState::NON_MEMBER);
   // Remove from membership table if it was previously a member
   membershipTable_.remove(object_id, set_id);
   return true;
 }
 
-bool World::removeMember(std::size_t object_id, std::size_t set_id) {
+bool World::removeMember(core::ObjectId object_id, core::ObjectId set_id) {
   bool removed = membershipTable_.remove(object_id, set_id);
   if (removed) {
     membershipMatrix_.set(object_id, set_id, storage::MembershipState::UNKNOWN);
@@ -99,66 +99,66 @@ bool World::removeMember(std::size_t object_id, std::size_t set_id) {
   return removed;
 }
 
-storage::MembershipState World::membershipState(std::size_t object_id, std::size_t set_id) const {
+storage::MembershipState World::membershipState(core::ObjectId object_id, core::ObjectId set_id) const {
   return membershipMatrix_.query(object_id, set_id);
 }
 
-bool World::isMember(std::size_t object_id, std::size_t set_id) const {
+bool World::isMember(core::ObjectId object_id, core::ObjectId set_id) const {
   return membershipState(object_id, set_id) == storage::MembershipState::MEMBER;
 }
 
-bool World::isNonMember(std::size_t object_id, std::size_t set_id) const {
+bool World::isNonMember(core::ObjectId object_id, core::ObjectId set_id) const {
   return membershipState(object_id, set_id) == storage::MembershipState::NON_MEMBER;
 }
 
-bool World::isUnknown(std::size_t object_id, std::size_t set_id) const {
+bool World::isUnknown(core::ObjectId object_id, core::ObjectId set_id) const {
   return membershipState(object_id, set_id) == storage::MembershipState::UNKNOWN;
 }
 
-std::vector<std::size_t> World::membersOf(std::size_t set_id) const {
+std::vector<core::ObjectId> World::membersOf(core::ObjectId set_id) const {
   return membershipMatrix_.column(set_id);
 }
 
-std::vector<std::size_t> World::setsOf(std::size_t object_id) const {
+std::vector<core::ObjectId> World::setsOf(core::ObjectId object_id) const {
   return membershipMatrix_.row(object_id);
 }
 
-std::vector<std::size_t> World::intersect(std::size_t set_a, std::size_t set_b) const {
+std::vector<core::ObjectId> World::intersect(core::ObjectId set_a, core::ObjectId set_b) const {
   return membershipMatrix_.intersect(set_a, set_b);
 }
 
-std::vector<std::size_t> World::unite(std::size_t set_a, std::size_t set_b) const {
+std::vector<core::ObjectId> World::unite(core::ObjectId set_a, core::ObjectId set_b) const {
   return membershipMatrix_.unite(set_a, set_b);
 }
 
-std::vector<std::size_t> World::difference(std::size_t set_a, std::size_t set_b) const {
+std::vector<core::ObjectId> World::difference(core::ObjectId set_a, core::ObjectId set_b) const {
   return membershipMatrix_.difference(set_a, set_b);
 }
 
 // Obligations
 
-std::size_t World::addObligation(std::size_t target_id, std::size_t antecedent_root_id, std::size_t consequent_root_id) {
+core::ObligationId World::addObligation(core::ObjectId target_id, core::AstNodeId antecedent_root_id, core::AstNodeId consequent_root_id) {
   return obligationTable_.insert(target_id, antecedent_root_id, consequent_root_id);
 }
 
 // AST construction
 
-std::size_t World::createAstNode(core::AstNodeType node_type, const std::string& value) {
+core::AstNodeId World::createAstNode(core::AstNodeType node_type, const std::string& value) {
   return astNodeTable_.insert(node_type, value);
 }
 
-void World::addAstChild(std::size_t parent_node_id, std::size_t position, std::size_t child_node_id) {
+void World::addAstChild(core::AstNodeId parent_node_id, std::size_t position, core::AstNodeId child_node_id) {
   astChildTable_.insert(parent_node_id, position, child_node_id);
 }
 
 // Lookup
 
-core::Object* World::findObject(std::size_t id) {
+core::Object* World::findObject(core::ObjectId id) {
   auto* row = objectTable_.find(id);
   return row ? row->pointer : nullptr;
 }
 
-const core::Object* World::findObject(std::size_t id) const {
+const core::Object* World::findObject(core::ObjectId id) const {
   const auto* row = objectTable_.find(id);
   return row ? row->pointer : nullptr;
 }

@@ -33,7 +33,7 @@ bool MembershipMatrix::testBit(const std::vector<uint64_t>& bits, std::size_t po
 
 // Index management
 
-std::size_t MembershipMatrix::objectBitPos(std::size_t object_id) {
+std::size_t MembershipMatrix::objectBitPos(core::ObjectId object_id) {
   auto it = objectIndex_.find(object_id);
   if (it != objectIndex_.end()) return it->second;
 
@@ -43,7 +43,7 @@ std::size_t MembershipMatrix::objectBitPos(std::size_t object_id) {
   return pos;
 }
 
-std::size_t MembershipMatrix::setBitPos(std::size_t set_id) {
+std::size_t MembershipMatrix::setBitPos(core::ObjectId set_id) {
   auto it = setIndex_.find(set_id);
   if (it != setIndex_.end()) return it->second;
 
@@ -55,7 +55,7 @@ std::size_t MembershipMatrix::setBitPos(std::size_t set_id) {
 
 // Core operations
 
-void MembershipMatrix::set(std::size_t object_id, std::size_t set_id, MembershipState state) {
+void MembershipMatrix::set(core::ObjectId object_id, core::ObjectId set_id, MembershipState state) {
   if (state == MembershipState::UNKNOWN) {
     auto setIt = setIndex_.find(set_id);
     auto objIt = objectIndex_.find(object_id);
@@ -82,15 +82,15 @@ void MembershipMatrix::set(std::size_t object_id, std::size_t set_id, Membership
   }
 }
 
-bool MembershipMatrix::test(std::size_t object_id, std::size_t set_id) const {
+bool MembershipMatrix::test(core::ObjectId object_id, core::ObjectId set_id) const {
   return query(object_id, set_id) == MembershipState::MEMBER;
 }
 
-bool MembershipMatrix::testNonMember(std::size_t object_id, std::size_t set_id) const {
+bool MembershipMatrix::testNonMember(core::ObjectId object_id, core::ObjectId set_id) const {
   return query(object_id, set_id) == MembershipState::NON_MEMBER;
 }
 
-MembershipState MembershipMatrix::query(std::size_t object_id, std::size_t set_id) const {
+MembershipState MembershipMatrix::query(core::ObjectId object_id, core::ObjectId set_id) const {
   auto setIt = setIndex_.find(set_id);
   if (setIt == setIndex_.end()) return MembershipState::UNKNOWN;
 
@@ -105,8 +105,8 @@ MembershipState MembershipMatrix::query(std::size_t object_id, std::size_t set_i
 }
 
 // Row: which sets does this object belong to? (MEMBER only)
-std::vector<std::size_t> MembershipMatrix::row(std::size_t object_id) const {
-  std::vector<std::size_t> result;
+std::vector<core::ObjectId> MembershipMatrix::row(core::ObjectId object_id) const {
+  std::vector<core::ObjectId> result;
   auto valIt = objectValue_.find(object_id);
   if (valIt == objectValue_.end()) return result;
 
@@ -126,8 +126,8 @@ std::vector<std::size_t> MembershipMatrix::row(std::size_t object_id) const {
 }
 
 // Column: which objects are in this set? (MEMBER only)
-std::vector<std::size_t> MembershipMatrix::column(std::size_t set_id) const {
-  std::vector<std::size_t> result;
+std::vector<core::ObjectId> MembershipMatrix::column(core::ObjectId set_id) const {
+  std::vector<core::ObjectId> result;
   auto valIt = setValue_.find(set_id);
   if (valIt == setValue_.end()) return result;
 
@@ -147,8 +147,8 @@ std::vector<std::size_t> MembershipMatrix::column(std::size_t set_id) const {
 }
 
 // Bitwise: objects in BOTH set_a AND set_b (MEMBER bits)
-std::vector<std::size_t> MembershipMatrix::intersect(std::size_t set_a, std::size_t set_b) const {
-  std::vector<std::size_t> result;
+std::vector<core::ObjectId> MembershipMatrix::intersect(core::ObjectId set_a, core::ObjectId set_b) const {
+  std::vector<core::ObjectId> result;
   auto aIt = setValue_.find(set_a);
   auto bIt = setValue_.find(set_b);
   if (aIt == setValue_.end() || bIt == setValue_.end()) return result;
@@ -172,8 +172,8 @@ std::vector<std::size_t> MembershipMatrix::intersect(std::size_t set_a, std::siz
 }
 
 // Bitwise: objects in set_a OR set_b (MEMBER bits)
-std::vector<std::size_t> MembershipMatrix::unite(std::size_t set_a, std::size_t set_b) const {
-  std::vector<std::size_t> result;
+std::vector<core::ObjectId> MembershipMatrix::unite(core::ObjectId set_a, core::ObjectId set_b) const {
+  std::vector<core::ObjectId> result;
   auto aIt = setValue_.find(set_a);
   auto bIt = setValue_.find(set_b);
 
@@ -201,8 +201,8 @@ std::vector<std::size_t> MembershipMatrix::unite(std::size_t set_a, std::size_t 
 }
 
 // Bitwise: objects in set_a but NOT set_b (MEMBER bits)
-std::vector<std::size_t> MembershipMatrix::difference(std::size_t set_a, std::size_t set_b) const {
-  std::vector<std::size_t> result;
+std::vector<core::ObjectId> MembershipMatrix::difference(core::ObjectId set_a, core::ObjectId set_b) const {
+  std::vector<core::ObjectId> result;
   auto aIt = setValue_.find(set_a);
   if (aIt == setValue_.end()) return result;
 

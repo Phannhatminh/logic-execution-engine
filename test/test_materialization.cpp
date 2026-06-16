@@ -6,9 +6,9 @@ using namespace logic::core;
 using namespace logic::engine;
 
 // Helper: build antecedent MEMBER_OF(self, set_id)
-static std::size_t makeAntecedent(World& w, std::size_t set_id) {
+static AstNodeId makeAntecedent(World& w, ObjectId set_id) {
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_set = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id));
+  auto lit_set = w.createAstNode(AstNodeType::LITERAL, std::to_string(set_id.value));
   auto ante = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(ante, 0, ref_self);
   w.addAstChild(ante, 1, lit_set);
@@ -31,7 +31,7 @@ TEST(Materialization, CreateEntity) {
   // Consequent: CREATE_ENTITY("newobj") AND MEMBER_OF(newobj, target)
   auto create = w.createAstNode(AstNodeType::CREATE_ENTITY, "newobj");
   auto ref_new = w.createAstNode(AstNodeType::REFERENCE, "newobj");
-  auto lit_target = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId()));
+  auto lit_target = w.createAstNode(AstNodeType::LITERAL, std::to_string(target->getId().value));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_new);
   w.addAstChild(mem, 1, lit_target);
@@ -67,13 +67,13 @@ TEST(Materialization, CreateTuple) {
 
   // Consequent: CREATE_TUPLE("pair", self, b) AND MEMBER_OF(pair, rel)
   auto ref_self = w.createAstNode(AstNodeType::REFERENCE, "self");
-  auto lit_b = w.createAstNode(AstNodeType::LITERAL, std::to_string(b->getId()));
+  auto lit_b = w.createAstNode(AstNodeType::LITERAL, std::to_string(b->getId().value));
   auto create_tuple = w.createAstNode(AstNodeType::CREATE_TUPLE, "pair");
   w.addAstChild(create_tuple, 0, ref_self);
   w.addAstChild(create_tuple, 1, lit_b);
 
   auto ref_pair = w.createAstNode(AstNodeType::REFERENCE, "pair");
-  auto lit_rel = w.createAstNode(AstNodeType::LITERAL, std::to_string(rel->getId()));
+  auto lit_rel = w.createAstNode(AstNodeType::LITERAL, std::to_string(rel->getId().value));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_pair);
   w.addAstChild(mem, 1, lit_rel);
@@ -113,7 +113,7 @@ TEST(Materialization, CreateSet) {
   w.addAstChild(create_set, 0, var_ref);
 
   auto ref_newset = w.createAstNode(AstNodeType::REFERENCE, "newset");
-  auto lit_container = w.createAstNode(AstNodeType::LITERAL, std::to_string(container->getId()));
+  auto lit_container = w.createAstNode(AstNodeType::LITERAL, std::to_string(container->getId().value));
   auto mem = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem, 0, ref_newset);
   w.addAstChild(mem, 1, lit_container);
@@ -157,7 +157,7 @@ TEST(Materialization, SuccessorPattern) {
 
   auto create_m = w.createAstNode(AstNodeType::CREATE_ENTITY, "m");
   auto mem_m_nat_ref = w.createAstNode(AstNodeType::REFERENCE, "m");
-  auto mem_m_nat_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(nat->getId()));
+  auto mem_m_nat_lit = w.createAstNode(AstNodeType::LITERAL, std::to_string(nat->getId().value));
   auto mem_m_nat = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_m_nat, 0, mem_m_nat_ref);
   w.addAstChild(mem_m_nat, 1, mem_m_nat_lit);
@@ -169,7 +169,7 @@ TEST(Materialization, SuccessorPattern) {
   w.addAstChild(create_t, 1, ref_m);
 
   auto ref_t = w.createAstNode(AstNodeType::REFERENCE, "t");
-  auto lit_succ = w.createAstNode(AstNodeType::LITERAL, std::to_string(succ->getId()));
+  auto lit_succ = w.createAstNode(AstNodeType::LITERAL, std::to_string(succ->getId().value));
   auto mem_t_succ = w.createAstNode(AstNodeType::FUNCTION_CALL, "MEMBER_OF");
   w.addAstChild(mem_t_succ, 0, ref_t);
   w.addAstChild(mem_t_succ, 1, lit_succ);

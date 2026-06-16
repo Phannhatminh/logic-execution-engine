@@ -7,16 +7,16 @@ void ObjectTable::insert(core::Object* obj, core::SysType sys_type) {
   rows_.emplace(row.id, row);
 }
 
-void ObjectTable::remove(std::size_t id) {
+void ObjectTable::remove(core::ObjectId id) {
   rows_.erase(id);
 }
 
-ObjectRow* ObjectTable::find(std::size_t id) {
+ObjectRow* ObjectTable::find(core::ObjectId id) {
   auto it = rows_.find(id);
   return it != rows_.end() ? &it->second : nullptr;
 }
 
-const ObjectRow* ObjectTable::find(std::size_t id) const {
+const ObjectRow* ObjectTable::find(core::ObjectId id) const {
   auto it = rows_.find(id);
   return it != rows_.end() ? &it->second : nullptr;
 }

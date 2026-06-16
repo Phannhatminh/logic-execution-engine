@@ -2,28 +2,29 @@
 #include <cstddef>
 #include <map>
 #include <vector>
+#include "core/ids.hpp"
 
 namespace logic::storage {
 
 struct TupleElementRow {
-  std::size_t tuple_id;
+  core::ObjectId tuple_id;
   std::size_t position;
-  std::size_t element_id;
+  core::ObjectId element_id;
 };
 
 class TupleElementTable {
 public:
-  void insert(std::size_t tuple_id, std::size_t position, std::size_t element_id);
-  void removeByTuple(std::size_t tuple_id);
+  void insert(core::ObjectId tuple_id, std::size_t position, core::ObjectId element_id);
+  void removeByTuple(core::ObjectId tuple_id);
 
-  std::vector<TupleElementRow> elementsOf(std::size_t tuple_id) const;
+  std::vector<TupleElementRow> elementsOf(core::ObjectId tuple_id) const;
 
   std::vector<TupleElementRow> allRows() const;
   std::size_t size() const;
 
 private:
   // tuple_id → sorted map of position → element_id
-  std::map<std::size_t, std::map<std::size_t, std::size_t>> rows_;
+  std::map<core::ObjectId, std::map<std::size_t, core::ObjectId>> rows_;
 };
 
 }

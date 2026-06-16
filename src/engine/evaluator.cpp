@@ -20,10 +20,10 @@ Evaluator::Evaluator(World& world) : world_(world) {}
 
 // Main dispatch
 
-EvalResult Evaluator::evaluate(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evaluate(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   if (!node) {
-    throw std::runtime_error("AST node not found: " + std::to_string(node_id));
+    throw std::runtime_error("AST node not found: " + std::to_string(node_id.value));
   }
 
   switch (node->node_type) {
@@ -41,39 +41,39 @@ EvalResult Evaluator::evaluate(std::size_t node_id, const Bindings& bindings) co
   throw std::runtime_error("Unknown AST node type");
 }
 
-bool Evaluator::evaluateBool(std::size_t node_id, const Bindings& bindings) const {
+bool Evaluator::evaluateBool(core::AstNodeId node_id, const Bindings& bindings) const {
   return evaluateState(node_id, bindings) == MembershipState::MEMBER;
 }
 
-storage::MembershipState Evaluator::evaluateState(std::size_t node_id, const Bindings& bindings) const {
+storage::MembershipState Evaluator::evaluateState(core::AstNodeId node_id, const Bindings& bindings) const {
   EvalResult result = evaluate(node_id, bindings);
   if (auto* s = std::get_if<MembershipState>(&result)) {
     return *s;
   }
-  throw std::runtime_error("Expected MembershipState result from AST node " + std::to_string(node_id));
+  throw std::runtime_error("Expected MembershipState result from AST node " + std::to_string(node_id.value));
 }
 
 // LITERAL: value is stored as string in the node
-// "true"/"false" → MembershipState, numeric string → size_t, otherwise → string
-EvalResult Evaluator::evalLiteral(std::size_t node_id) const {
+// "true"/"false" → MembershipState, numeric string → ObjectId, otherwise → string
+EvalResult Evaluator::evalLiteral(core::AstNodeId node_id) const {
   const auto* node = world_.astNodeTable().find(node_id);
   const std::string& val = node->value;
 
   if (val == "true") return MembershipState::MEMBER;
   if (val == "false") return MembershipState::NON_MEMBER;
 
-  // Try numeric
+  // Try numeric — literal numeric IDs are ObjectIds
   try {
     std::size_t pos;
     std::size_t num = std::stoull(val, &pos);
-    if (pos == val.size()) return num;
+    if (pos == val.size()) return core::ObjectId{num};
   } catch (...) {}
 
   return val;
 }
 
 // REFERENCE: resolve variable name from bindings → object ID
-EvalResult Evaluator::evalReference(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evalReference(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   const std::string& name = node->value;
 
@@ -86,7 +86,7 @@ EvalResult Evaluator::evalReference(std::size_t node_id, const Bindings& binding
 
 // UNARY_OP: value is the operator ("NOT")
 // child at position 0 is the operand
-EvalResult Evaluator::evalUnaryOp(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evalUnaryOp(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   auto children = world_.astChildTable().childrenOf(node_id);
 
@@ -111,7 +111,7 @@ EvalResult Evaluator::evalUnaryOp(std::size_t node_id, const Bindings& bindings)
 //   IMPLIES(A, B):    A=N     → M, without evaluating B (vacuously true)
 // In all other cases (including left/A = UNKNOWN) the right operand must be
 // evaluated, since UNKNOWN alone never determines the result.
-EvalResult Evaluator::evalBinaryOp(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evalBinaryOp(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   auto children = world_.astChildTable().childrenOf(node_id);
 
@@ -119,8 +119,8 @@ EvalResult Evaluator::evalBinaryOp(std::size_t node_id, const Bindings& bindings
     throw std::runtime_error("Binary operator needs 2 operands");
   }
 
-  std::size_t left_id = children[0].child_node_id;
-  std::size_t right_id = children[1].child_node_id;
+  core::AstNodeId left_id = children[0].child_node_id;
+  core::AstNodeId right_id = children[1].child_node_id;
 
   if (node->value == "AND") {
     MembershipState left = evaluateState(left_id, bindings);
@@ -166,7 +166,7 @@ EvalResult Evaluator::evalBinaryOp(std::size_t node_id, const Bindings& bindings
 // child 0: REFERENCE node (the bound variable name)
 // child 1: REFERENCE node (the set to iterate over, resolved to set ID)
 // child 2: the body condition
-EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evalQuantifier(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   auto children = world_.astChildTable().childrenOf(node_id);
 
@@ -180,12 +180,12 @@ EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindin
 
   // Get set ID to iterate over
   EvalResult setResult = evaluate(children[1].child_node_id, bindings);
-  std::size_t set_id = std::get<std::size_t>(setResult);
+  core::ObjectId set_id = std::get<core::ObjectId>(setResult);
 
   // Get members of the set
-  std::vector<std::size_t> members = world_.membersOf(set_id);
+  std::vector<core::ObjectId> members = world_.membersOf(set_id);
 
-  std::size_t body_id = children[2].child_node_id;
+  core::AstNodeId body_id = children[2].child_node_id;
 
   // FORALL is an iterated AND: stops early only on a NON_MEMBER body
   // (a definite counterexample). A member whose body is UNKNOWN doesn't
@@ -193,7 +193,7 @@ EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindin
   // unless a later member is NON_MEMBER. Empty domain → MEMBER (vacuous).
   if (node->value == "FORALL") {
     bool sawUnknown = false;
-    for (std::size_t member_id : members) {
+    for (core::ObjectId member_id : members) {
       Bindings newBindings = bindings;
       newBindings[varName] = member_id;
       MembershipState body = evaluateState(body_id, newBindings);
@@ -207,7 +207,7 @@ EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindin
   // Empty domain → NON_MEMBER.
   if (node->value == "EXISTS") {
     bool sawUnknown = false;
-    for (std::size_t member_id : members) {
+    for (core::ObjectId member_id : members) {
       Bindings newBindings = bindings;
       newBindings[varName] = member_id;
       MembershipState body = evaluateState(body_id, newBindings);
@@ -222,7 +222,7 @@ EvalResult Evaluator::evalQuantifier(std::size_t node_id, const Bindings& bindin
 
 // FUNCTION_CALL: value is the function name
 // "MEMBER_OF": child 0 is the object, child 1 is the set
-EvalResult Evaluator::evalFunctionCall(std::size_t node_id, const Bindings& bindings) const {
+EvalResult Evaluator::evalFunctionCall(core::AstNodeId node_id, const Bindings& bindings) const {
   const auto* node = world_.astNodeTable().find(node_id);
   auto children = world_.astChildTable().childrenOf(node_id);
 
@@ -233,8 +233,8 @@ EvalResult Evaluator::evalFunctionCall(std::size_t node_id, const Bindings& bind
     EvalResult objResult = evaluate(children[0].child_node_id, bindings);
     EvalResult setResult = evaluate(children[1].child_node_id, bindings);
 
-    std::size_t obj_id = std::get<std::size_t>(objResult);
-    std::size_t set_id = std::get<std::size_t>(setResult);
+    core::ObjectId obj_id = std::get<core::ObjectId>(objResult);
+    core::ObjectId set_id = std::get<core::ObjectId>(setResult);
 
     return world_.membershipState(obj_id, set_id);
   }
@@ -244,19 +244,19 @@ EvalResult Evaluator::evalFunctionCall(std::size_t node_id, const Bindings& bind
 
 // 5.2 — Obligation evaluation
 
-bool Evaluator::evaluateObligations(std::size_t object_id, std::size_t set_id) const {
+bool Evaluator::evaluateObligations(core::ObjectId object_id, core::ObjectId set_id) const {
   // First check the matrix directly
   if (world_.isMember(object_id, set_id)) {
     return true;
   }
 
   // Then check obligations lazily
-  std::unordered_set<std::size_t> visited;
+  std::unordered_set<core::ObligationId> visited;
   return evaluateObligationsImpl(object_id, set_id, visited);
 }
 
-bool Evaluator::evaluateObligationsImpl(std::size_t object_id, std::size_t set_id,
-                                        std::unordered_set<std::size_t>& visited) const {
+bool Evaluator::evaluateObligationsImpl(core::ObjectId object_id, core::ObjectId set_id,
+                                        std::unordered_set<core::ObligationId>& visited) const {
   auto obligations = world_.obligationTable().findByTarget(set_id);
 
   for (const auto* obligation : obligations) {
@@ -283,18 +283,18 @@ bool Evaluator::evaluateObligationsImpl(std::size_t object_id, std::size_t set_i
 
 // 5.3 — Obligation activation (materializing)
 
-bool Evaluator::activateObligations(std::size_t object_id, std::size_t set_id) {
+bool Evaluator::activateObligations(core::ObjectId object_id, core::ObjectId set_id) {
   // Already a direct member — nothing to activate
   if (world_.isMember(object_id, set_id)) {
     return true;
   }
 
-  std::unordered_set<std::size_t> visited;
+  std::unordered_set<core::ObligationId> visited;
   return activateObligationsImpl(object_id, set_id, visited);
 }
 
-bool Evaluator::activateObligationsImpl(std::size_t object_id, std::size_t set_id,
-                                        std::unordered_set<std::size_t>& visited) {
+bool Evaluator::activateObligationsImpl(core::ObjectId object_id, core::ObjectId set_id,
+                                        std::unordered_set<core::ObligationId>& visited) {
   auto obligations = world_.obligationTable().findByTarget(set_id);
 
   for (const auto* obligation : obligations) {
@@ -338,11 +338,11 @@ bool Evaluator::activateObligationsImpl(std::size_t object_id, std::size_t set_i
 //
 // Returns true if all materializations succeeded.
 
-bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
-                            std::size_t default_object_id, std::size_t default_set_id) {
+bool Evaluator::materialize(core::AstNodeId node_id, Bindings& bindings,
+                            core::ObjectId default_object_id, core::ObjectId default_set_id) {
   const auto* node = world_.astNodeTable().find(node_id);
   if (!node) {
-    throw std::runtime_error("AST node not found during materialization: " + std::to_string(node_id));
+    throw std::runtime_error("AST node not found during materialization: " + std::to_string(node_id.value));
   }
 
   // Base case: LITERAL "true" — materialize the default fact (object ∈ target set)
@@ -366,8 +366,8 @@ bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
     EvalResult objResult = evaluate(children[0].child_node_id, bindings);
     EvalResult setResult = evaluate(children[1].child_node_id, bindings);
 
-    std::size_t obj_id = std::get<std::size_t>(objResult);
-    std::size_t set_id = std::get<std::size_t>(setResult);
+    core::ObjectId obj_id = std::get<core::ObjectId>(objResult);
+    core::ObjectId set_id = std::get<core::ObjectId>(setResult);
 
     world_.addMember(obj_id, set_id);
     return true;
@@ -380,7 +380,7 @@ bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
       throw std::runtime_error("NOT materialization needs an operand");
     }
 
-    std::size_t child_id = children[0].child_node_id;
+    core::AstNodeId child_id = children[0].child_node_id;
     const auto* child = world_.astNodeTable().find(child_id);
 
     // NOT(MEMBER_OF(x, S)) → setNonMember(x, S)
@@ -392,8 +392,8 @@ bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
       EvalResult objResult = evaluate(grandchildren[0].child_node_id, bindings);
       EvalResult setResult = evaluate(grandchildren[1].child_node_id, bindings);
 
-      std::size_t obj_id = std::get<std::size_t>(objResult);
-      std::size_t set_id = std::get<std::size_t>(setResult);
+      core::ObjectId obj_id = std::get<core::ObjectId>(objResult);
+      core::ObjectId set_id = std::get<core::ObjectId>(setResult);
 
       world_.setNonMember(obj_id, set_id);
       return true;
@@ -426,11 +426,11 @@ bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
       throw std::runtime_error("OR materialization needs 2 operands");
     }
 
-    std::size_t left_id = children[0].child_node_id;
-    std::size_t right_id = children[1].child_node_id;
+    core::AstNodeId left_id = children[0].child_node_id;
+    core::AstNodeId right_id = children[1].child_node_id;
 
     // Build antecedent: NOT(A)
-    auto not_a = world_.createAstNode(core::AstNodeType::UNARY_OP, "NOT");
+    core::AstNodeId not_a = world_.createAstNode(core::AstNodeType::UNARY_OP, "NOT");
     world_.addAstChild(not_a, 0, left_id);
 
     // Create obligation: (NOT A) → B, targeting the default set
@@ -454,10 +454,10 @@ bool Evaluator::materialize(std::size_t node_id, Bindings& bindings,
     std::vector<core::Object*> elements;
     for (const auto& child : children) {
       EvalResult result = evaluate(child.child_node_id, bindings);
-      std::size_t elem_id = std::get<std::size_t>(result);
+      core::ObjectId elem_id = std::get<core::ObjectId>(result);
       core::Object* obj = world_.findObject(elem_id);
       if (!obj) {
-        throw std::runtime_error("CREATE_TUPLE: element not found: " + std::to_string(elem_id));
+        throw std::runtime_error("CREATE_TUPLE: element not found: " + std::to_string(elem_id.value));
       }
       elements.push_back(obj);
     }

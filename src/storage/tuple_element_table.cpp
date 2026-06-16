@@ -2,15 +2,15 @@
 
 namespace logic::storage {
 
-void TupleElementTable::insert(std::size_t tuple_id, std::size_t position, std::size_t element_id) {
+void TupleElementTable::insert(core::ObjectId tuple_id, std::size_t position, core::ObjectId element_id) {
   rows_[tuple_id][position] = element_id;
 }
 
-void TupleElementTable::removeByTuple(std::size_t tuple_id) {
+void TupleElementTable::removeByTuple(core::ObjectId tuple_id) {
   rows_.erase(tuple_id);
 }
 
-std::vector<TupleElementRow> TupleElementTable::elementsOf(std::size_t tuple_id) const {
+std::vector<TupleElementRow> TupleElementTable::elementsOf(core::ObjectId tuple_id) const {
   std::vector<TupleElementRow> result;
   auto it = rows_.find(tuple_id);
   if (it == rows_.end()) return result;

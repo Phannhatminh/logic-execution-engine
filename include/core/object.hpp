@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <memory>
 #include <string>
+#include "core/ids.hpp"
 #include "core/types.hpp"
 
 namespace logic::core {
@@ -12,7 +13,7 @@ public:
   Object();
   virtual ~Object() = default;
 
-  std::size_t getId() const;
+  ObjectId getId() const;
 
   virtual ObjectType getType() const;
   virtual bool equals(const Object& other) const;
@@ -21,10 +22,10 @@ public:
   virtual std::string toString() const;
 
 protected:
-  Object(std::size_t id);
+  Object(ObjectId id);
 
 private:
   static std::atomic<std::size_t> nextId_;
-  std::size_t id_;
+  ObjectId id_;
 };
 };
